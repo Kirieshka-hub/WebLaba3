@@ -1,0 +1,207 @@
+{% extends 'layout/blank.html' %}
+
+{% block title %}Christmas Edit{% endblock title %}
+
+{% block content %}
+
+<div class="background">
+    <div class="container">
+        {% if onboarding %}
+            <h1>Complete your Profile</h1>
+        {% else %}
+            <h1>Edit your Profile</h1>
+        {% endif %}
+        <img class="avatarBox" src="{{ user.profile.avatar }}" alt="Avatar" />
+        <h1 class="nameBox" id="displayname">{{ user.profile.displayname|default:"" }}</h1>
+        <div class="usernameBox">@{{ user.profile.user }}</div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }} <!-- Рендеринг поля формы -->
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div> <!-- Отображение ошибок -->
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="back">
+                <button type="submit">Submit</button>
+                <div class="cancel-btn">
+                    <a href="{{ request.META.HTTP_REFERER }}" class="cancel-link">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    textarea {
+        resize: none; 
+    }
+
+    .background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+    }
+
+    .container {
+        margin-top: -40px;
+        max-width: 800px;
+        min-width: 600px;
+        padding: 40px; /* Внутренние отступы */
+        background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный цвет фона контейнера */
+        backdrop-filter: blur(2px); /* Эффект размытия фона */
+        border-radius: 12px; /* Скругление углов */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Тень для контейнера */
+        text-align: center; /* Центрируем текст внутри контейнера */
+    }
+
+    .avatarBox {
+        width: 250px; /* Ширина аватара */
+        height: 250px; /* Высота аватара */
+        border-radius: 50%; /* Скругление углов для создания круга */
+        object-fit: cover; /* Обрезка изображения с сохранением пропорций */
+    }
+
+    .nameBox {
+        margin: 10px;
+    }
+
+    .usernameBox {
+        font-size: 1.1em;
+        color: #8e8e8e;
+        margin-top: 10px;
+    }
+
+    .info {
+        margin-top: 10px;
+        font-size: 1.8em;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px; /* Отступ между группами полей формы */
+        text-align: left; /* Выравнивание текста по левому краю */
+    }
+
+    label {
+        display: block; /* Блоковое отображение для меток */
+        margin-bottom: 5px; /* Отступ снизу для меток */
+        color: #333; /* Цвет текста меток */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea {
+        width: 100%; /* Полная ширина поля ввода */
+        padding: 10px; /* Отступы внутри поля ввода */
+        border-radius: 5px; /* Скругление углов полей ввода */
+        border: 1px solid #ccc; /* Светло-серая рамка */
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Внутренняя тень */
+        transition: border-color 0.3s ease; /* Плавный переход цвета рамки */
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="file"]:focus,
+    textarea:focus {
+        border-color: #007BFF; /* Цвет рамки при фокусе */
+        outline: none; /* Убираем стандартное выделение при фокусе */
+    }
+
+    button {
+        margin-right: 10px;
+        background-color: #007BFF; /* Цвет фона кнопки */
+        color: white; /* Цвет текста кнопки */
+        padding: 10px 15px; /* Отступы внутри кнопки */
+        border-radius: 5px; /* Скругление углов кнопки */
+        border: none; /* Убираем стандартную рамку кнопки */
+        cursor: pointer; /* Указатель при наведении на кнопку */
+        transition: background-color 0.3s ease; /* Плавный переход цвета фона кнопки при наведении */
+        font-size: 1.1em;
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Темнее цвет фона при наведении на кнопку */
+    }
+
+    .back {
+        display: flex;
+        width: 150px;
+        justify-content: space-between;
+    }
+
+    .cancel-btn {
+        background-color: #adb1b9;
+        border-radius: 5px;
+        display: flex;
+        cursor: pointer; /* Указатель при наведении на кнопку */
+        transition: background-color 0.3s ease;
+    }
+
+    .cancel-link {
+        padding: 10px 15px;
+        text-decoration: none; 
+        color:#fff;
+        font-size: 1.1em;
+    }
+
+    .cancel-btn:hover {
+       background-color: gray;
+   }
+
+   .error {
+       color: red; /* Цвет текста ошибок */
+       font-size: 0.9em; /* Размер шрифта для ошибок */
+       margin-top: 5px; /* Отступ сверху для ошибок */
+   }
+   
+   @keyframes falling-snow {
+       from { transform: translateY(-100vh); }
+       to { transform: translateY(100vh); }
+   }
+
+   .snowflake {
+       position: absolute;
+       top: -10%;
+       width: 10px;
+       height: 10px;
+       background-color: white;
+       border-radius: 50%;
+       opacity: 0.8;
+       animation: falling-snow linear infinite;
+   }
+</style>
+
+<script>
+// scripts.js
+document.addEventListener('DOMContentLoaded', function() {
+   const fileInput = document.querySelector('input[type="file"]');
+
+   fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const image = document.querySelector('.avatarBox');
+
+      if (file && file.type.includes('image')) {
+          const url = URL.createObjectURL(file);
+          image.src = url;
+      }
+   });
+
+   // This updates the name
+   const display_nameInput = document.getElementById('id_displayname');
+   const display_nameOutput = document.getElementById('displayname');
+
+   display_nameInput.addEventListener('input', (event) => {
+       display_nameOutput.innerText = event.target.value;
+   });
+});
+</script>
+
+{% endblock content %}

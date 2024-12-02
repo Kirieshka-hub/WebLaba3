@@ -1,0 +1,79 @@
+{% extends 'layout/blank.html' %}
+
+{% block content %}
+    <div class="background">
+        <div class="container">
+            <h2>Sign out</h2>
+            <p>Are you sure you want to sign out?</p>
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit">sign out<output></output></button>
+            </form>
+        </div>
+    </div>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif; /* Шрифт для всего документа */
+            overflow: hidden; /* Скрываем прокрутку */
+        }
+
+        button {
+            margin-right: 10px;
+            background-color: #007BFF; /* Цвет фона кнопки */
+            color: white; /* Цвет текста кнопки */
+            padding: 10px 15px; /* Отступы внутри кнопки */
+            border-radius: 5px; /* Скругление углов кнопки */
+            border: none; /* Убираем стандартную рамку кнопки */
+            cursor: pointer; /* Указатель при наведении на кнопку */
+            transition: background-color 0.3s ease; /* Плавный переход цвета фона кнопки при наведении */
+            font-size: 1.1em;
+        }
+    
+        .background {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 100vh; /* Высота на весь экран */
+            
+        }
+    
+        .container {
+            margin-top: -100px;
+            max-width: 800px; /* Максимальная ширина контейнера */
+            padding: 40px; /* Внутренние отступы */
+            background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный цвет фона контейнера */
+            backdrop-filter: blur(2px); /* Эффект размытия фона */
+            border-radius: 12px; /* Скругление углов */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Тень для контейнера */
+            text-align: center; /* Центрируем текст внутри контейнера */
+            
+        }
+    
+        h1 {
+            font-size: 2.5rem; /* Размер шрифта заголовка */
+            color: #1e3a8a; /* Цвет текста заголовка */
+            margin-bottom: 16px; /* Отступ снизу заголовка */
+        }
+
+
+        @keyframes falling-snow {
+            from { transform: translateY(-100vh); }
+            to { transform: translateY(100vh); }
+        }
+    
+        .snowflake {
+            position: absolute;
+            top: -10%;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: falling-snow linear infinite;
+        }
+    </style>
+{% endblock content %}
+
+

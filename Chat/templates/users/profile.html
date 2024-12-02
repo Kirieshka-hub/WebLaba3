@@ -1,0 +1,78 @@
+{% extends 'layout/blank.html' %}
+
+{% block title %}Christmas Profile{% endblock title %}
+
+{% block content %}
+<div class="background">
+    <div class="container">
+        <img class="avatarBox" src="{{ profile.avatar }}" alt="Avatar" />
+        <h1 class="profile-name">{{ profile.name }}</h1>
+        <div class="usernameBox">@{{ profile.user.username }}</div>
+        {% if profile.info %}
+            <div class="info" id="profile-info">{{ profile.info }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+    }
+
+    .container {
+        max-width: 800px;
+        min-width: 600px;
+        padding: 40px; /* Внутренние отступы */
+        background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный цвет фона контейнера */
+        backdrop-filter: blur(2px); /* Эффект размытия фона */
+        border-radius: 12px; /* Скругление углов */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Тень для контейнера */
+        text-align: center; /* Центрируем текст внутри контейнера */
+    }
+
+    .avatarBox {
+        width: 250px; /* Ширина изображения */
+        height: 250px; /* Высота изображения */
+        border-radius: 50%; /* Скругление углов для создания круга */
+        object-fit: cover; /* Обрезка изображения с сохранением пропорций */
+    }
+
+    .profile-name {
+        font-size: 2.5em;
+        margin-bottom: 0;
+        margin-top: 10px;
+    }
+
+    .usernameBox {
+        font-size: 1.1em;
+        color:#9e9e9e;
+    }
+
+    .info {
+        margin-top: 30px;
+        font-size: 1.8em;
+        text-align: center;
+    }
+
+    @keyframes falling-snow {
+        from { transform: translateY(-100vh); }
+        to { transform: translateY(100vh); }
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10%;
+        width: 10px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: falling-snow linear infinite;
+    }
+</style>
+
+{% endblock content %}

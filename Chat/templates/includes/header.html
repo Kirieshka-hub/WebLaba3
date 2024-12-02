@@ -1,0 +1,201 @@
+<header class="header">
+    <div class="logo">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'messanger' %}">
+            <img src="/static/images/hat.png" alt="Logo" />
+            <span>Christmas Chat</span>
+        </a>
+        {% else %}
+            <a href="/">
+                <img src="/static/images/hat.png" alt="Logo" />
+                <span>Christmas Chat</span>
+            </a>
+        {% endif %}
+    </div>
+    <nav class="nav">
+        <ul class="navitems">
+            {% if request.user.is_authenticated %}
+                <li><a href="/messanger" class="nav-item auth-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle nav-item auth-button">
+                        <img src="{{ user.profile.avatar }}" alt="User Avatar" class="avatar" />
+                        <p class="username">{{ user.profile.name }}</p>
+                        <span class="arrow">&#9662;</span> <!-- Стрелочка вниз -->
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'profile' %}">My Profile</a></li>
+                        <li><a href="{% url 'edit-profile' %}">Edit Profile</a></li>
+                        <li><a href="{% url "profile-settings" %}">Settings</a></li>
+                        <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+                    </ul>
+                </li>
+            {% else %}
+                <li><a href="{% url 'account_login' %}" class="auth-button nav-item">Login</a></li>
+                <li><a href="{% url 'account_signup' %}" class="auth-button nav-item">Signup</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<style>
+    /* styles.css */
+    body {
+        margin: 0;
+        font-family: 'Arial', sans-serif; /* Шрифт для всего документа */
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(28, 36, 48, .2); /* Полупрозрачный темный фон */
+        backdrop-filter: blur(4px);
+        height: 80px; /* Высота хедера */
+        padding: 0 20px; /* Отступы */
+        color: white; /* Цвет текста */
+        position: sticky;
+        top: 0;
+        z-index: 40; /* Уровень наложения */
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Тень для хедера */
+    }
+
+    .logo a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: white; /* Цвет текста логотипа */
+    }
+
+    .logo img {
+        height: 24px; /* Высота логотипа */
+        margin-right: 10px; /* Отступ между логотипом и текстом */
+    }
+
+    .nav {
+        position: relative;
+    }
+
+    .navitems {
+        display: flex;
+        align-items: center; /* Выравнивание по центру по вертикали */
+        margin: 0;
+        padding: 0;
+    }
+
+    .navitems li {
+        list-style-type: none;
+        margin: 0;
+    }
+
+    .nav-item {
+        display: flex; /* Используем flexbox для навигационных элементов */
+        align-items: center; /* Центрируем содержимое по вертикали */
+        height: 100%; /* Устанавливаем высоту на 100% для равенства */
+        text-decoration: none;
+        color: white; /* Цвет текста навигации */
+        transition: color 0.3s ease; /* Плавный переход цвета текста */
+    }
+
+    .auth-button {
+        padding: 10px 15px; /* Отступы для кнопок */
+        border-radius: 5px; /* Скругление углов */
+        transition: background-color 0.3s ease, color 0.3s ease; /* Плавный переход */
+    }
+
+    .auth-button:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Цвет фона при наведении */
+        color: white; /* Цвет текста при наведении (убрали золотистый цвет) */
+    }
+
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-toggle {
+        cursor: pointer;
+    }
+
+    .dropdown-menu {
+        display: none; /* Скрываем меню по умолчанию */
+        position: absolute;
+        right: 0; 
+        background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон для выпадающего меню */
+        color: black; /* Цвет текста выпадающего меню */
+        backdrop-filter: blur(2px);
+        border-radius: 5px; 
+        z-index: 100; 
+        opacity: 0; /* Начальная непрозрачность для анимации */
+        transform: translateY(-10px); /* Начальное смещение для анимации */
+        transition: opacity 0.2s ease-out, transform 0.2s ease-out; /* Плавный переход для появления меню */
+    }
+
+    .dropdown-menu.show {
+        display: block; 
+        opacity: 1; 
+        transform: translateY(5px); /* Возвращаем в исходное положение при показе меню */
+   }
+
+   .dropdown-menu li {
+       padding: 10px; 
+       transition: background-color 0.3s ease; /* Плавный переход фона при наведении на элементы меню */
+   }
+
+   .dropdown-menu li a {
+       color: black; /* Цвет текста в выпадающем меню */
+       text-decoration: none; 
+   }
+   .dropdown-menu li a:hover {
+       color: #fff;
+   }
+    
+   .avatar {
+       height: 32px; /* Размер аватара (можно изменить) */ 
+       width: 32px;
+       border-radius: 50%; /* Круглая форма аватара */
+       margin-right: 5px; 
+       object-fit: cover; /* Обрезка изображения с сохранением пропорций */
+   }
+   
+   .arrow {
+       margin-left: 5px; /* Отступ слева от имени пользователя */
+       font-size: 12px; /* Размер стрелочки */
+       transition: transform 0.3s ease; /* Плавный переход для анимации */
+   }
+   
+   .dropdown-toggle.active .arrow {
+       transform: rotate(180deg); /* Поворачиваем стрелочку на 180 градусов при активном состоянии */
+   }
+</style>
+
+<script>
+// scripts.js
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    
+    dropdownToggle.addEventListener('click', function(event) {
+        event.preventDefault(); // Предотвращаем переход по ссылке
+       
+       const dropdownMenu = this.nextElementSibling;
+
+       // Переключаем видимость выпадающего меню
+       if (dropdownMenu.classList.contains('show')) {
+           dropdownMenu.classList.remove('show'); // Убираем класс show
+           this.classList.remove('active'); // Убираем класс active
+       } else {
+           dropdownMenu.classList.add('show'); // Добавляем класс show
+           this.classList.add('active'); // Добавляем класс active
+       }
+   });
+
+   // Закрытие выпадающего меню при клике вне его
+   document.addEventListener('click', function(event) {
+       const isClickInside = dropdownToggle.contains(event.target);
+       const dropdownMenu = dropdownToggle.nextElementSibling;
+
+       if (!isClickInside && dropdownMenu.classList.contains('show')) {
+           dropdownMenu.classList.remove('show'); // Убираем класс show
+           dropdownToggle.classList.remove('active'); // Убираем класс active
+       }
+   });
+});
+</script>

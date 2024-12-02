@@ -1,0 +1,14 @@
+.emoji-button {
+    background-color: #007BFF; /* Цвет фона кнопки */
+    border: none; /* Убираем рамку */
+    border-radius: 20px; /* Скругление углов */
+    cursor: pointer; /* Указатель при наведении */
+    padding: 8px 10px;
+    margin-right: 10px;
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.emoji-button:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+}
+

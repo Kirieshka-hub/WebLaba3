@@ -1,0 +1,6 @@
+body {
+    background: url('../images/background.jpg') no-repeat center center fixed; /* Фоновое изображение */
+    background-size: cover; /* Масштабируем изображение */
+    overflow: hidden; /* Скрываем элементы, выходящие за пределы */
+}
+

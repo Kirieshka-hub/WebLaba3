@@ -1,0 +1,89 @@
+/* styles.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1c2430; /* bg-gray-800 */
+    height: 80px; /* h-20 */
+    padding: 0 20px; /* px-8 */
+    color: white; /* text-white */
+    position: sticky;
+    top: 0;
+    z-index: 40; /* z-40 */
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white; /* text-white */
+}
+
+.logo img {
+    height: 24px; /* h-6 */
+    margin-right: 10px; /* gap-2 */
+}
+
+.nav {
+    position: relative;
+}
+
+.navitems {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.navitems li {
+    margin-left: 20px; /* Добавляем отступ между элементами */
+}
+
+.navitems a {
+    text-decoration: none;
+    color: white; /* text-white */
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none; /* Скрываем меню по умолчанию */
+    position: absolute;
+    right: 0; 
+    background-color: white; /* bg-white */
+    color: black; /* text-black */
+    border-radius: 5px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    z-index: 100; 
+}
+
+.dropdown-menu li {
+    padding: 10px; 
+}
+
+.dropdown-menu li a {
+    color: black; /* text-black */
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block; /* Показываем меню при наведении на родительский элемент */
+}
+
+.avatar {
+   height: 32px; /* Размер аватара */
+   width: 32px; 
+   border-radius: 50%; /* Круглая форма аватара */
+   margin-right: 5px; 
+}

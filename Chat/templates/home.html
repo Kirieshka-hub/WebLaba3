@@ -1,0 +1,92 @@
+{% extends 'layout/blank.html' %}
+
+{% block content %}
+
+<div class="background">
+    <div class="container">
+        <h1>Welcome to Cristmas Chat</h1>
+        <p class="description">Connect with friends and family this holiday season. Start chatting now!</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'messanger' %}" class="cta-button">Join the Chat</a>
+        {% else %}
+            <a href="{% url 'account_login' %}" class="cta-button">Join the Chat</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* styles.css */
+    body {
+        margin: 0;
+        font-family: 'Arial', sans-serif; /* Шрифт для всего документа */
+        overflow: hidden; /* Скрываем прокрутку */
+    }
+
+    .background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 100vh; /* Высота на весь экран */
+        
+    }
+
+    .container {
+        margin-top: -100px;
+        max-width: 800px; /* Максимальная ширина контейнера */
+        padding: 40px; /* Внутренние отступы */
+        background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный цвет фона контейнера */
+        backdrop-filter: blur(2px); /* Эффект размытия фона */
+        border-radius: 12px; /* Скругление углов */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Тень для контейнера */
+        text-align: center; /* Центрируем текст внутри контейнера */
+        
+    }
+
+    h1 {
+        font-size: 2.5rem; /* Размер шрифта заголовка */
+        color: #1e3a8a; /* Цвет текста заголовка */
+        margin-bottom: 16px; /* Отступ снизу заголовка */
+    }
+
+    .description {
+        font-size: 1.2rem; /* Размер шрифта описания */
+        color: #1e3a8a; /* Цвет текста описания */
+        margin-bottom: 24px; /* Отступ снизу описания */
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 12px 24px; /* Отступы для кнопки */
+        font-size: 1rem; /* Размер шрифта кнопки */
+        color: white; /* Цвет текста кнопки */
+        background-color: #00796b; /* Цвет фона кнопки (темно-бирюзовый) */
+        border-radius: 8px; /* Скругление углов кнопки */
+        text-decoration: none; /* Убираем подчеркивание у ссылки */
+        transition: background-color 0.3s ease, transform 0.3s ease; /* Плавный переход для фона и трансформации */
+    }
+
+    .cta-button:hover {
+        background-color: #004d40; /* Цвет фона при наведении на кнопку (темно-бирюзовый) */
+        transform: scale(1.05); /* Увеличение кнопки при наведении */
+    }
+
+    @keyframes falling-snow {
+        from { transform: translateY(-100vh); }
+        to { transform: translateY(100vh); }
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10%;
+        width: 10px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: falling-snow linear infinite;
+    }
+</style>
+
+
+{% endblock content %}

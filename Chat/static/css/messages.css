@@ -1,0 +1,51 @@
+/* styles.css */
+.messages {
+    position: relative;
+    margin-top: 20px;
+}
+
+.message-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    max-width: 600px; /* Максимальная ширина сообщения */
+    margin: 0 auto; /* Центрирование */
+    z-index: 50; /* Уровень наложения */
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    color: white; /* Цвет текста */
+    margin-bottom: 10px; /* Отступ между сообщениями */
+}
+
+.alert.alert-info {
+    background-color: #3b82f6; /* Цвет для информационных сообщений */
+}
+
+.alert.alert-success {
+    background-color: #4ade80; /* Цвет для успешных сообщений */
+}
+
+.alert.alert-warning {
+    background-color: #f59e0b; /* Цвет для предупреждений */
+}
+
+.alert.alert-danger {
+    background-color: #ef4444; /* Цвет для ошибок */
+}
+
+.message-content {
+    flex-grow: 1; /* Занимает всё доступное пространство */
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white; /* Цвет кнопки закрытия */
+    font-size: 20px; /* Размер шрифта кнопки закрытия */
+    cursor: pointer; /* Курсор при наведении */
+}

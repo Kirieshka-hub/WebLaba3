@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Django Template">
+    <title>{% block title %}Cristmas Chat{% endblock title %}</title>
+    <link rel="icon" href="{% static 'images/hat.png' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static "css/message.css" %}">
+
+    <link rel="stylesheet" href="{% static 'css/emoji.css' %}">
+</head>
+<body class="{% block class %}{% endblock %}">
+    
+    {% include 'includes/messages.html' %}
+    {% include 'includes/header.html' %}
+
+    <div class="background">
+        <div class="container">
+            <div class="nav-container">
+                <div class="search">
+                    <input type="text" class="search-input" placeholder="Поиск...">
+                <button class="search-button">🔍</button>
+                </div>
+                <div class="search-results"></div>
+            </div>
+            <div class="chat-container">
+                {% if 1 == 2 %}
+                <div class="user-info">
+                    <a href="@{{user.profile.user.username}}"><img src="{{user.profile.avatar}}" class="avatar"></a>
+                    <div class="status">
+                        <a href="@{{user.profile.user.username}}" class="username-msg">{{user.profile.name}}</a>
+                        <p>online</p>
+                    </div>
+                </div>
+                {% else %}
+                    <div class="empty-chat-window">
+                        <p>Start Chatting Now!</p>
+                    </div>
+                {% endif %}
+                <div class="chat-messages">
+                    <!-- Здесь будут сообщения чата -->
+                </div>
+                {% if 1 == 2 %}
+                <div class="message-input-container">
+                    <button id="emojiButton" class="emoji-button">😊</button>
+                    <input type="text" id="messageInput" placeholder="Введите сообщение..." class="message-input">
+                    <button id="sendMessageButton">Отправить</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{% static "js/snowing.js" %}"></script>   
+    <script src="{% static "js/message.js" %}"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script>
+    <script src="{% static 'js/emoji.js' %}"></script>
+
+    <script src="{% static 'js/search_users.js' %}"></script>
+</body>
+</html>

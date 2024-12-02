@@ -1,0 +1,161 @@
+{% extends 'layout/blank.html' %}
+
+{% block title %}Christmas Settings{% endblock title %}
+
+{% block content %}
+<div class="background">
+    <div class="container">
+        <h1>Account Settings</h1>
+        <div class="email_container">
+            <form method="POST" action="{% url 'update_email' %}" class="email_form">
+                {% csrf_token %}
+                <label for="email">Email:</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    value="{{ user.email }}" 
+                    readonly
+                    class="email_input">
+                <div class="button_container">
+                    <button type="button" class="edit_button" onclick="enableEditing()">Edit</button>
+                    <button type="submit" class="save_button" style="display:none;">Save</button>
+                </div>
+            </form>
+        </div>
+        <div class="delete_container">
+            <p class="delete_warning">This action will permanently delete your account.</p>
+            <form method="POST" action="{% url 'delete_account' %}">
+                {% csrf_token %}
+                <button type="submit" class="delete_button">Delete Account</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function enableEditing() {
+        const emailInput = document.getElementById('email');
+        const saveButton = document.querySelector('.save_button');
+        emailInput.readOnly = false;
+        emailInput.focus();
+        saveButton.style.display = 'inline-block';
+    }
+</script>
+
+<style>
+    .background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+    }
+
+    .container {
+        margin-top: -80px;
+        max-width: 800px;
+        min-width: 600px;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(2px);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        text-align: left; /* Align text to the left */
+    }
+
+    .email_container {
+        width: 100%;
+        padding: 10px 0;
+        border-bottom: 1px solid black;
+    }
+
+    .email_form {
+        display: flex;
+        align-items: center; /* Align items vertically */
+        justify-content: space-between; /* Space between elements */
+    }
+
+    .email_input {
+        border: 1px solid black;
+        margin-left: 10px;
+        border-radius: 10px;
+        background: transparent;
+        font-size: 16px;
+        text-align: left;
+        flex-grow: 1; /* Allow input to take available space */
+        padding: 5px;
+        margin-right: 10px; /* Space between input and buttons */
+        outline: none;
+    }
+
+    .email_input[readonly] {
+        cursor: not-allowed;
+    }
+
+    .button_container {
+        display: flex; /* Use flexbox for button alignment */
+        gap: 10px; /* Space between buttons */
+    }
+
+    .edit_button, .save_button {
+        padding: 5px 15px;
+        border: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .edit_button:hover, .save_button:hover {
+        background-color: #0056b3;
+    }
+
+    .delete_container {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid black;
+    }
+
+    .delete_warning {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .delete_button {
+        margin-top: -5px;
+        padding: 10px 20px;
+        border: none;
+        background-color: red;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .delete_button:hover {
+        background-color: darkred;
+    }
+    
+    @keyframes falling-snow {
+        from { transform: translateY(-100vh); }
+        to { transform: translateY(100vh); }
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10%;
+        width: 10px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: falling-snow linear infinite;
+    }
+</style>
+
+{% endblock content %}

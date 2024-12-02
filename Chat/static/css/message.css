@@ -1,0 +1,215 @@
+.background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100vh; /* Высота на весь экран */
+}
+
+.container {
+    display: flex;
+    margin-top: -100px;
+    min-width: 800px;
+    max-width: 800px; /* Максимальная ширина контейнера */
+    padding: 40px; /* Внутренние отступы */
+    background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный цвет фона контейнера */
+    backdrop-filter: blur(2px); /* Эффект размытия фона */
+    border-radius: 12px; /* Скругление углов */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Тень для контейнера */
+    text-align: center; /* Центрируем текст внутри контейнера */
+}
+
+.nav-container {
+    background-color: rgba(255,255,255, 0.1); /* Полупрозрачный черный фон */
+    border: 1px solid rgba(128, 128, 128, 1);
+    width: 30%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-input {
+    width: 80%; /* Ширина поля поиска */
+    margin-top: 25px;
+    padding: 10px; /* Внутренние отступы */
+    border-radius: 20px; /* Скругление углов поля поиска */
+    border: none; /* Убираем рамку */
+}
+
+.search-button {
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 25px;
+    margin-left: 10px;
+    border: none;
+    background-color: #0056b3;
+}
+
+.search-button:hover {
+    background-color: #007BFF;
+}
+.search-results{
+    width: 80%;
+    margin-top: 28px;
+}
+.user-block{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 20px;
+    border-bottom: 1px solid rgb(0, 0, 0, 1);
+    cursor: pointer;
+}
+
+.user-block:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+
+
+.chat-container {
+    background-color: rgba(255,255,255, 0.1); 
+    border: 1px solid rgba(128, 128, 128, 1);
+    width: 70%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column; /* Вертикальное размещение элементов */
+}
+
+.username-msg{
+    font-size: 1em;
+    color: black;
+    text-decoration: none;
+}
+
+.user-info {
+    display: flex;
+    align-items: center; /* Центрируем по вертикали */
+    padding: 10px; /* Внутренние отступы */
+    height: 10%;
+    border-bottom: 1px solid rgba(128, 128, 128, 1);
+
+}
+
+.status p{
+    margin: 0;
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: start;
+}
+
+
+.profile-pic {
+    width: 40px; /* Ширина фото профиля */
+    height: 40px; /* Высота фото профиля */
+    border-radius: 50%; /* Круглая форма фото профиля */
+    margin-right: 10px; /* Отступ справа от фото профиля */
+}
+
+
+
+.chat-messages {
+    flex-grow: 1; /* Занимает оставшееся пространство в контейнере чата */
+    overflow-y: auto; /* Прокрутка сообщений при переполнении */
+}
+
+@keyframes falling-snow {
+    from { transform: translateY(-100vh); }
+    to { transform: translateY(100vh); }
+}
+
+.snowflake {
+    position: absolute;
+    top: -10%;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: falling-snow linear infinite;
+}
+
+.empty-chat-window{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.empty-chat-window p {
+    font-size: 1.8em;
+    color: white;
+    opacity: .45;
+}
+.message-input-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.message-input {
+    flex-grow: 1; /* Занимает оставшееся пространство */
+    padding: 10px;
+    border-radius: 20px; /* Скругление углов поля ввода */
+    border: 1px solid rgba(128, 128, 128, 1);
+    margin-right: 10px; /* Отступ справа от поля ввода */
+}
+
+#sendMessageButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #007BFF; /* Цвет кнопки */
+    color: white;
+    cursor: pointer;
+}
+
+#sendMessageButton:hover {
+    background-color: #0056b3; /* Цвет кнопки при наведении */
+}
+.chat-message {
+    background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
+    border-radius: 10px; /* Скругление углов */
+    padding: 10px; /* Внутренние отступы */
+    margin: 5px 0; /* Отступы сверху и снизу */
+    text-align: left; /* Выравнивание текста по левому краю */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    word-wrap: break-word; /* Перенос длинных слов */
+    overflow-wrap: break-word; /* Поддержка для современных браузеров */
+    max-width: 90%; /* Максимальная ширина сообщения */
+    align-self: flex-start; /* Выравнивание сообщений по левому краю */
+}
+
+
+.chat-message:hover {
+    background-color: rgba(255, 255, 255, 0.4); /* Изменение цвета фона при наведении */
+}
+
+.emoji-button {
+    background-color: transparent; /* Прозрачный фон */
+    border: none; /* Убираем рамку */
+    cursor: pointer; /* Указатель при наведении */
+    font-size: 24px; /* Размер шрифта */
+    margin-right: 10px; /* Отступ справа */
+}
+
+.emoji-button:hover {
+    opacity: 0.7; /* Изменение прозрачности при наведении */
+}
+
+/* Стили для выбора эмодзи */
+.emoji-button-container {
+    position: relative; /* Для позиционирования всплывающего окна */
+}
+
+.emoji-button-picker {
+    display: none; /* Скрываем по умолчанию */
+}

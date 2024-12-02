@@ -1,0 +1,103 @@
+<div class="messages" style="display: {% if messages %}block{% else %}none{% endif %};">
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <div class="message-content">
+                    <span>{{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* styles.css */
+    .messages {
+        position: fixed; /* Фиксированное позиционирование */
+        top: 20px; /* Отступ сверху */
+        left: 50%;
+        transform: translateX(-50%); /* Центрирование по горизонтали */
+        z-index: 9999; /* Уровень наложения, чтобы быть поверх других элементов */
+        opacity: 0; /* Начальная непрозрачность для анимации */
+        transition: opacity 0.5s ease; /* Плавный переход для появления */
+    }
+
+    .messages.show {
+        opacity: 1; /* Полная непрозрачность при показе */
+    }
+
+    .message-container {
+        max-width: 600px; /* Максимальная ширина сообщения */
+        margin: 0 auto; /* Центрирование */
+    }
+
+    .alert {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-radius: 8px;
+        color: white; /* Цвет текста */
+        margin-bottom: 10px; /* Отступ между сообщениями */
+    }
+
+    .alert.alert-info {
+        background-color: #3b82f6; /* Цвет для информационных сообщений */
+    }
+
+    .alert.alert-success {
+        background-color: #4ade80; /* Цвет для успешных сообщений */
+    }
+
+    .alert.alert-warning {
+        background-color: #f59e0b; /* Цвет для предупреждений */
+    }
+
+    .alert.alert-danger {
+        background-color: #ef4444; /* Цвет для ошибок */
+    }
+
+    .message-content {
+        flex-grow: 1; /* Занимает всё доступное пространство */
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messagesContainer = document.querySelector('.messages');
+    
+    // Добавляем класс show для плавного появления
+    if (messagesContainer.style.display === 'block') {
+        messagesContainer.classList.add('show');
+    }
+
+    const alerts = document.querySelectorAll('.alert');
+
+    // Функция для скрытия сообщения
+    function hideAlert(alert, index) {
+        setTimeout(() => {
+            alert.style.opacity = 0; // Плавное исчезновение
+            setTimeout(() => {
+                alert.style.display = 'none'; // Убираем сообщение из DOM после исчезновения
+                // Проверяем, есть ли еще сообщения
+                if (index < alerts.length - 1) {
+                    // Если есть следующее сообщение, показываем его
+                    alerts[index + 1].style.display = 'flex'; // Показываем следующее сообщение
+                    alerts[index + 1].style.opacity = 1; // Устанавливаем непрозрачность
+                } else {
+                    messagesContainer.style.display = 'none'; // Скрываем контейнер, если нет сообщений
+                    messagesContainer.classList.remove('show'); // Убираем класс show
+                }
+            }, 500); // Задержка перед удалением из DOM (должна совпадать с временем анимации)
+        }, 3000); // Время отображения сообщения (3 секунды)
+    }
+
+    alerts.forEach((alert, index) => {
+        alert.style.display = 'none'; // Скрываем все сообщения изначально
+        if (index === 0) {
+            alert.style.display = 'flex'; // Показываем только первое сообщение
+            alert.style.opacity = 1; // Устанавливаем непрозрачность на 1
+        }
+        hideAlert(alert, index); // Запускаем функцию скрытия для каждого сообщения
+    });
+});
+</script>
