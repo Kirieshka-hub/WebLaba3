@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.http import JsonResponse
+from .models import Chat, Message  # Добавьте Chat в список импортов
+from django.db.models import Q
+
 
 def home_view(request):
     return render(request, 'home.html')
@@ -61,26 +64,74 @@ def delete_account(request):
         request.user.delete()
         return redirect('home')  # замените на имя вашего URL для домашней страницы
 
-def messanger_view(request):
-    return render(request, 'Chat.html')
+# def messanger_view(request):
+#     return render(request, 'chat.html', {'users': []})
 
 
 @login_required
-def search_users(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest' and 'query' in request.GET:
-        query = request.GET.get('query').strip()
-        if query.startswith('@'):
-            query = query[1:]  # Убираем '@' из запроса
+def search_users_view(request):
+    query = request.GET.get('query', '').strip()
+    users = []
+    if query and query.startswith('@'):
+        query = query[1:]  # Убираем '@' из запроса
+        users = User.objects.filter(username__icontains=query)[:10]
 
-        users = User.objects.filter(username__icontains=query)[:10]  # Ограничиваем количество результатов
-        results = [
-            {
-                'username': user.username,
-                'displayname': user.profile.name,
-                'avatar': user.profile.avatar,
-            }
-            for user in users
-        ]
-        return JsonResponse({'results': results})
-    return JsonResponse({'results': []})
+    if len(users) == 1:
+        # Если пользователь найден, переходим к чату
+        return redirect('load_chat', username=users[0].username)
+
+    return render(request, 'chat/search_results.html', {'users': users})
+
+
+@login_required
+def load_chat_view(request, username):
+    """
+    Загружает чат с указанным пользователем.
+    """
+    recipient = get_object_or_404(User, username=username)
+    messages = Message.objects.filter(
+        Q(sender=request.user, recipient=recipient) |
+        Q(sender=recipient, recipient=request.user)
+    ).order_by('timestamp')
+
+    # Сохраняем чат в навбар
+    chat, created = Chat.objects.get_or_create(user=request.user, contact=recipient)
+
+    context = {
+        'recipient': recipient,
+        'messages': messages,
+    }
+    return render(request, 'chat/chat_window.html', context)
+
+
+
+@login_required
+def send_message_view(request, username):
+    if request.method == 'POST':
+        recipient = get_object_or_404(User, username=username)
+        text = request.POST.get('message')
+
+        if text:
+            # Создаём сообщение
+            message = Message.objects.create(sender=request.user, recipient=recipient, text=text)
+
+            # Обновляем или создаём чат
+            Chat.objects.update_or_create(
+                user=request.user,
+                contact=recipient,
+                defaults={'last_message': text, 'updated_at': message.timestamp}
+            )
+            Chat.objects.update_or_create(
+                user=recipient,
+                contact=request.user,
+                defaults={'last_message': text, 'updated_at': message.timestamp}
+            )
+
+    # Перенаправляем обратно на страницу чата
+    return redirect('load_chat', username=username)
+
+@login_required
+def messanger_view(request):
+    chats = Chat.objects.filter(user=request.user).order_by('-updated_at')
+    return render(request, 'chat.html', {'chats': chats})
 

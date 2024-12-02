@@ -22,36 +22,28 @@
         <div class="container">
             <div class="nav-container">
                 <div class="search">
-                    <input type="text" class="search-input" placeholder="Поиск...">
-                <button class="search-button">🔍</button>
+                    <form method="get" action="{% url 'search_users' %}">
+                        <input type="text" name="query" class="search-input" placeholder="Поиск...">
+                        <button type="submit" class="search-button">🔍</button>
+                    </form>
                 </div>
-                <div class="search-results"></div>
+                <div class="active-chats">
+                    <h3>Active Chats</h3>
+                    <ul>
+                        {% for chat in chats %}
+                            <li>
+                                <a href="{% url 'load_chat' chat.contact.username %}">
+                                    <img src="{{ chat.contact.profile.avatar }}" alt="{{ chat.contact.username }}" class="avatar">
+                                    {{ chat.contact.profile.name }}: {{ chat.last_message }}
+                                </a>
+                            </li>
+                        {% empty %}
+                            <p>No active chats</p>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div class="chat-container">
-                {% if 1 == 2 %}
-                <div class="user-info">
-                    <a href="@{{user.profile.user.username}}"><img src="{{user.profile.avatar}}" class="avatar"></a>
-                    <div class="status">
-                        <a href="@{{user.profile.user.username}}" class="username-msg">{{user.profile.name}}</a>
-                        <p>online</p>
-                    </div>
-                </div>
-                {% else %}
-                    <div class="empty-chat-window">
-                        <p>Start Chatting Now!</p>
-                    </div>
-                {% endif %}
-                <div class="chat-messages">
-                    <!-- Здесь будут сообщения чата -->
-                </div>
-                {% if 1 == 2 %}
-                <div class="message-input-container">
-                    <button id="emojiButton" class="emoji-button">😊</button>
-                    <input type="text" id="messageInput" placeholder="Введите сообщение..." class="message-input">
-                    <button id="sendMessageButton">Отправить</button>
-                </div>
-                {% endif %}
-            </div>
+            
         </div>
     </div>
     <script src="{% static "js/snowing.js" %}"></script>   

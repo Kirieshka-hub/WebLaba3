@@ -1,21 +1,98 @@
-<div class="chat-container">
-    <div class="user-info">
-        <a href="/profile/{{ recipient.username }}">
-            <img src="{{ recipient.profile.avatar }}" class="avatar">
-        </a>
-        <div class="status">
-            <a href="/profile/{{ recipient.username }}" class="username-msg">{{ recipient.profile.name }}</a>
-            <p>online</p>
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Django Template">
+    <title>{% block title %}Cristmas Chat{% endblock title %}</title>
+    <link rel="icon" href="{% static 'images/hat.png' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static "css/message.css" %}">
+
+    <link rel="stylesheet" href="{% static 'css/emoji.css' %}">
+</head>
+<body class="{% block class %}{% endblock %}">
+    
+    {% include 'includes/messages.html' %}
+    {% include 'includes/header.html' %}
+
+    <div class="background">
+        <div class="container">
+            <div class="nav-container">
+                <div class="search">
+                    <form method="get" action="{% url 'search_users' %}">
+                        <input type="text" name="query" class="search-input" placeholder="Поиск...">
+                        <button type="submit" class="search-button">🔍</button>
+                    </form>
+                </div>
+                <div class="active-chats">
+                    <h3>Active Chats</h3>
+                    <ul>
+                        {% for chat in chats %}
+                            <li>
+                                <a href="{% url 'load_chat' chat.contact.username %}">
+                                    <img src="{{ chat.contact.profile.avatar }}" alt="{{ chat.contact.username }}" class="avatar">
+                                    <span class="box_info">{{ chat.contact.profile.name }}: {{ chat.last_message }}</span>
+                                </a>
+                            </li>
+                        {% empty %}
+                            <p>No active chats</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-container">
+                {% if recipient %}
+                    <!-- Если есть выбранный пользователь -->
+                    <div class="user-info">
+                        <a href="/profile/{{ recipient.username }}">
+                            <img src="{{ recipient.profile.avatar }}" class="avatar">
+                        </a>
+                        <div class="status">
+                            <a href="/profile/{{ recipient.username }}" class="username-msg">{{ recipient.profile.name }}</a>
+                            <p>online</p>
+                        </div>
+                    </div>
+                    <div class="chat-messages">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="chat-message {{ message.sender|yesno:'sent,received' }}">
+                                    <p>{{ message.text }}</p>
+                                    <span class="timestamp">{{ message.timestamp|date:"H:i" }}</span>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No messages yet. Start chatting with {{ recipient.profile.name }}!</p>
+                        {% endif %}
+                    </div>
+                    <div class="message-input-container">
+                        <form method="post" action="{% url 'send_message' recipient.username %}">
+                            {% csrf_token %}
+                            <input type="text" name="message" placeholder="Type your message..." class="message-input">
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <!-- Если пользователь не выбран -->
+                    <div class="empty-chat-window">
+                        <p>Еще нет сообщений. Выберите пользователя для начала переписки.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+
+    
         </div>
     </div>
-    <div class="chat-messages">
-        <p>Start chatting with {{ recipient.profile.name }}!</p>
-    </div>
-    <div class="message-input-container">
-        <form method="post" action="{% url 'send_message' recipient.username %}">
-            {% csrf_token %}
-            <input type="text" name="message" placeholder="Введите сообщение..." class="message-input">
-            <button type="submit">Отправить</button>
-        </form>
-    </div>
-</div>
+    <script src="{% static "js/snowing.js" %}"></script>   
+    <script src="{% static "js/message.js" %}"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script>
+    <script src="{% static 'js/emoji.js' %}"></script>
+
+    <script src="{% static 'js/search_users.js' %}"></script>
+</body>
+</html>

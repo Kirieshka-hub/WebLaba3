@@ -15,5 +15,9 @@ urlpatterns = [
 
     path('messanger/', views.messanger_view, name="messanger"),
     
+    path('search-users/', views.search_users_view, name='search_users'),
+    path('chat/<str:username>/', views.load_chat_view, name='load_chat'),
+    path('chat/<str:username>/send/', views.send_message_view, name='send_message'),
+    
 
 ]
