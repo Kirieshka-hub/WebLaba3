@@ -175,6 +175,8 @@
 #sendMessageButton:hover {
     background-color: #0056b3; /* Цвет кнопки при наведении */
 }
+
+
 .chat-message {
     background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
     border-radius: 10px; /* Скругление углов */
@@ -212,4 +214,60 @@
 
 .emoji-button-picker {
     display: none; /* Скрываем по умолчанию */
+}
+
+ 
+.chat-users {
+    margin: 0;
+    padding: 0;
+    width: 80%;
+}
+
+.chat-users li {
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+
+.chat-users li div {
+    border-bottom: 1px solid rgb(0, 0, 0, 1);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.chat-users li div img {
+    
+    margin-bottom: 5px;
+}
+
+.chat-users li:hover{
+    background-color: rgba(0,0,0, 0.1);
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.search-results{
+    margin: 0;
+}
+.search-results p {
+    margin: 0;
+}
+
+.search-results div  {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.search-results :hover{
+    background-color: rgba(0,0,0, 0.1);
+    cursor: pointer;
+}
+
+.user-info .status {
+    display: flex;
+
 }

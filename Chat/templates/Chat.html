@@ -23,43 +23,46 @@
             <div class="nav-container">
                 <div class="search">
                     <input type="text" class="search-input" placeholder="Поиск...">
-                <button class="search-button">🔍</button>
+                    <button type="submit" class="search-button">🔍</button>
                 </div>
-                <div class="search-results"></div>
+                <h3>Search</h3>
+                <div class="search-results"><p>No users found</p></div> <!-- Контейнер для результатов поиска -->
+                <h3>Active</h3>
+                <ul class="chat-users" id="chat-users">
+                    <!-- Здесь будут пользователи чата -->
+                </ul>
             </div>
+            
             <div class="chat-container">
-                {% if 1 == 2 %}
-                <div class="user-info">
-                    <a href="@{{user.profile.user.username}}"><img src="{{user.profile.avatar}}" class="avatar"></a>
+                <div class="user-info" id="user-info" style="display: none;">
+                    <a href="#" id="user-profile-link"><img src="" class="avatar" id="user-avatar"></a>
                     <div class="status">
-                        <a href="@{{user.profile.user.username}}" class="username-msg">{{user.profile.name}}</a>
+                        <a href="#" class="username-msg" id="user-displayname"></a>
                         <p>online</p>
+                        <button id="clearChatButton">Очистить чат</button>
                     </div>
                 </div>
-                {% else %}
-                    <div class="empty-chat-window">
-                        <p>Start Chatting Now!</p>
-                    </div>
-                {% endif %}
-                <div class="chat-messages">
+                <div class="empty-chat-window" id="empty-chat-window">
+                    <p>Start Chatting Now!</p>
+                </div>
+                <div class="chat-messages message-input-container" id="chat-messages" style="display: none;">
                     <!-- Здесь будут сообщения чата -->
                 </div>
-                {% if 1 == 2 %}
-                <div class="message-input-container">
-                    <button id="emojiButton" class="emoji-button">😊</button>
-                    <input type="text" id="messageInput" placeholder="Введите сообщение..." class="message-input">
-                    <button id="sendMessageButton">Отправить</button>
-                </div>
-                {% endif %}
+                <form method="post" id="messageForm">
+                    {% csrf_token %}
+                    <input type="text" id="messageInput" placeholder="Введите сообщение..." required>
+                    <button type="button" id="sendMessageButton">Отправить</button>
+                </form>                
             </div>
         </div>
     </div>
+    {% comment %} <script src="{% static 'js/search_users.js' %}"></script> {% endcomment %}
     <script src="{% static "js/snowing.js" %}"></script>   
     <script src="{% static "js/message.js" %}"></script>
+    {% comment %} <script src="{% static 'js/clear.js' %}"></script> {% endcomment %}
     
-    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script>
-    <script src="{% static 'js/emoji.js' %}"></script>
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'js/emoji.js' %}"></script> {% endcomment %}
 
-    <script src="{% static 'js/search_users.js' %}"></script>
 </body>
 </html>
