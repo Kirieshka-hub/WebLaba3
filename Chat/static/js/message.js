@@ -87,7 +87,6 @@ function addToNavbar(user) {
     }
 }
 
-// Функция для загрузки чата
 function loadChat(username) {
     if (!username) {
         console.error('Имя пользователя не передано!');
@@ -118,13 +117,14 @@ function loadChat(username) {
             chatMessagesContainer.style.display = 'flex';
             messageForm.style.display = 'flex';
 
-            chatMessagesContainer.innerHTML = '';
+            chatMessagesContainer.innerHTML = ''; // Очищаем старые сообщения
+
+            // Добавляем сообщения
             data.messages.forEach(message => {
                 const messageDiv = document.createElement('div');
-                const isMyMessage = message.sender === 'my_username'; // Замените 'my_username' на ваш идентификатор пользователя
 
                 messageDiv.classList.add('message');
-                if (isMyMessage) {
+                if (message.sender === data.current_user) {
                     messageDiv.classList.add('my-message');
                     messageDiv.innerHTML = `
                         <span class="sender">Вы:</span>
@@ -140,9 +140,19 @@ function loadChat(username) {
 
                 chatMessagesContainer.appendChild(messageDiv);
             });
+
+            // Прокрутка к последнему сообщению
+            scrollToLastMessage(chatMessagesContainer);
         })
         .catch(error => console.error('Ошибка при загрузке чата:', error));
 }
+
+// Функция для прокрутки к последнему сообщению
+function scrollToLastMessage(container) {
+    container.scrollTop = container.scrollHeight; // Устанавливаем scrollTop в максимальное значение
+}
+
+
 
 // Функция для скрытия правой панели
 function resetChatUI() {
@@ -156,13 +166,58 @@ function resetChatUI() {
 document.addEventListener('DOMContentLoaded', () => {
     resetChatUI();
     loadActiveChats();
-});
+});function updateActiveChat() {
+    // Получаем активного пользователя
+    const activeUsername = document.getElementById('user-displayname')?.textContent;
+    const chatMessagesContainer = document.getElementById('chat-messages');
+
+    if (activeUsername && chatMessagesContainer.style.display !== 'none') {
+        // Отправляем запрос для обновления сообщений
+        fetch(`/chat/${activeUsername}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.messages) return;
+
+                // Очищаем и обновляем сообщения
+                chatMessagesContainer.innerHTML = '';
+                data.messages.forEach(message => {
+                    const messageDiv = document.createElement('div');
+
+                    messageDiv.classList.add('message');
+                    if (message.sender === data.current_user) {
+                        messageDiv.classList.add('my-message');
+                        messageDiv.innerHTML = `
+                            <span class="sender">Вы:</span>
+                            <span class="message-content">${message.message}</span>
+                        `;
+                    } else {
+                        messageDiv.classList.add('received-message');
+                        messageDiv.innerHTML = `
+                            <span class="sender">${message.sender}:</span>
+                            <span class="message-content">${message.message}</span>
+                        `;
+                    }
+
+                    chatMessagesContainer.appendChild(messageDiv);
+                });
+
+                // Прокрутка к последнему сообщению
+                scrollToLastMessage(chatMessagesContainer);
+            })
+            .catch(error => console.error('Ошибка при обновлении чата:', error));
+    }
+}
+
+// Периодическое обновление активного чата
+setInterval(updateActiveChat, 5000); // Обновление каждые 5 секунд
+
 
 // Функция для отправки сообщения
 document.getElementById('sendMessageButton').addEventListener('click', function () {
     const messageInput = document.getElementById('messageInput');
     const messageContent = messageInput.value;
     const receiverUsername = document.getElementById('user-displayname').textContent;
+    const chatMessagesContainer = document.getElementById('chat-messages');
 
     if (messageContent) {
         fetch('/send_message/', {
@@ -179,7 +234,6 @@ document.getElementById('sendMessageButton').addEventListener('click', function 
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                const chatMessagesContainer = document.getElementById('chat-messages');
                 const newMessageDiv = document.createElement('div');
                 newMessageDiv.classList.add('message', 'my-message');
                 newMessageDiv.innerHTML = `
@@ -187,7 +241,11 @@ document.getElementById('sendMessageButton').addEventListener('click', function 
                     <span class="message-content">${messageContent}</span>
                 `;
                 chatMessagesContainer.appendChild(newMessageDiv);
-                messageInput.value = '';
+
+                // Прокручиваем чат к последнему сообщению
+                scrollToLastMessage(chatMessagesContainer);
+
+                messageInput.value = ''; // Очищаем поле ввода
             } else {
                 console.error('Ошибка при отправке сообщения:', data.error);
             }
@@ -195,6 +253,7 @@ document.getElementById('sendMessageButton').addEventListener('click', function 
         .catch(error => console.error('Ошибка:', error));
     }
 });
+
 
 // Функция для очистки чата
 document.getElementById('clearChatButton').addEventListener('click', function () {
@@ -239,3 +298,5 @@ function getCookie(name) {
 setInterval(() => {
     loadActiveChats();
 }, 5000);
+
+

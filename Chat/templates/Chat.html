@@ -50,6 +50,7 @@
                 </div>
                 <form method="post" id="messageForm" style="display: none;">
                     {% csrf_token %}
+                    <button id="emojiButton" class="emoji-button">😊</button>
                     <input type="text" id="messageInput" placeholder="Введите сообщение..." required>
                     <button type="button" id="sendMessageButton">Отправить</button>
                 </form>                
@@ -61,8 +62,8 @@
     <script src="{% static "js/message.js" %}"></script>
     {% comment %} <script src="{% static 'js/clear.js' %}"></script> {% endcomment %}
     
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script> {% endcomment %}
-    {% comment %} <script src="{% static 'js/emoji.js' %}"></script> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script>
+    <script src="{% static 'js/emoji.js' %}"></script>
 
 </body>
 </html>

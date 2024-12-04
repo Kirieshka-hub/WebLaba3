@@ -104,7 +104,9 @@ def chat_history_view(request, username):
         'avatar': receiver.profile.avatar if receiver.profile.avatar else '/static/images/default_avatar.png',
         'displayname': receiver.profile.name or receiver.username,
         'messages': message_list,
+        'current_user': request.user.username,  # Передаем текущего пользователя
     })
+
 
 @login_required
 def send_message(request):
