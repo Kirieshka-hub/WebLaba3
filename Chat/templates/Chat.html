@@ -25,8 +25,8 @@
                     <input type="text" class="search-input" placeholder="Поиск...">
                     <button type="submit" class="search-button">🔍</button>
                 </div>
-                <h3>Search</h3>
-                <div class="search-results"><p>No users found</p></div> <!-- Контейнер для результатов поиска -->
+                <h3 id = "search-head" style="display: none;">Search</h3>
+                <div class="search-results" id = "search-res" style="display: none;"><p>No users found</p></div> <!-- Контейнер для результатов поиска -->
                 <h3>Active</h3>
                 <ul class="chat-users" id="chat-users">
                     <!-- Здесь будут пользователи чата -->
@@ -48,7 +48,7 @@
                 <div class="chat-messages message-input-container" id="chat-messages" style="display: none;">
                     <!-- Здесь будут сообщения чата -->
                 </div>
-                <form method="post" id="messageForm">
+                <form method="post" id="messageForm" style="display: none;">
                     {% csrf_token %}
                     <input type="text" id="messageInput" placeholder="Введите сообщение..." required>
                     <button type="button" id="sendMessageButton">Отправить</button>

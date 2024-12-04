@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     // Создаем снежинки
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 70; i++) {
         const snowflake = document.createElement('div');
         
        // Задаем класс снежинки

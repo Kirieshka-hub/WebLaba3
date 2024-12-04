@@ -21,19 +21,25 @@ function loadActiveChats() {
         .catch(error => console.error('Ошибка при загрузке активных чатов:', error));
 }
 
-// Функция для поиска пользователей
-// Функция для поиска пользователей
+// Обработчик для поиска пользователей
 document.querySelector('.search-button').addEventListener('click', function () {
-    const input = document.querySelector('.search-input').value.trim(); // Получаем значение из поля ввода
+    const input = document.querySelector('.search-input').value.trim();
+    const searchHead = document.getElementById('search-head'); // Заголовок "Search"
+    const searchRes = document.getElementById('search-res'); // Контейнер результатов поиска
+    const resultsContainer = document.querySelector('.search-results'); // Контейнер для списка результатов
 
-    const resultsContainer = document.querySelector('.search-results'); // Контейнер для результатов поиска
     resultsContainer.innerHTML = ''; // Очищаем предыдущие результаты
 
     if (!input) {
-        // Если поле пустое, показываем сообщение "No users found"
-        resultsContainer.innerHTML = '<p>No users found</p>';
+        // Если поле ввода пустое, скрываем элементы
+        searchHead.style.display = 'none';
+        searchRes.style.display = 'none';
         return;
     }
+
+    // Показываем элементы, если есть текст в поле
+    searchHead.style.display = 'block';
+    searchRes.style.display = 'block';
 
     fetch(`/search_users?query=${input}`, {
         method: 'GET',
@@ -41,37 +47,33 @@ document.querySelector('.search-button').addEventListener('click', function () {
             'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.results.length === 0) {
-            // Если результатов нет, показываем сообщение "No users found"
-            resultsContainer.innerHTML = '<p>No users found</p>';
-        } else {
-            // Если есть результаты, отображаем их
-            data.results.forEach(user => {
-                const userDiv = document.createElement('div');
-                userDiv.innerHTML = `
-                    <img src="${user.avatar}" class="avatar" alt="Avatar">
-                    <span>${user.displayname}</span>
-                `;
-                userDiv.addEventListener('click', () => {
-                    loadChat(user.username); // Загружаем чат при клике
+        .then(response => response.json())
+        .then(data => {
+            if (data.results.length === 0) {
+                resultsContainer.innerHTML = '<p>No users found</p>';
+            } else {
+                data.results.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.innerHTML = `
+                        <img src="${user.avatar}" class="avatar" alt="Avatar">
+                        <span>${user.displayname}</span>
+                    `;
+                    userDiv.addEventListener('click', () => {
+                        loadChat(user.username); // Загружаем чат при клике
+                    });
+                    resultsContainer.appendChild(userDiv);
                 });
-                resultsContainer.appendChild(userDiv);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка при поиске пользователя:', error);
-        resultsContainer.innerHTML = '<p>Ошибка при поиске пользователя</p>'; // Показываем сообщение об ошибке
-    });
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при поиске пользователя:', error);
+            resultsContainer.innerHTML = '<p>Ошибка при поиске пользователя</p>';
+        });
 });
-
 
 // Функция для добавления пользователя в навбар
 function addToNavbar(user) {
     const chatUsersContainer = document.getElementById('chat-users');
-    // Проверяем, не добавлен ли пользователь уже
     if (!Array.from(chatUsersContainer.children).some(li => li.textContent.trim() === user.displayname)) {
         const userLi = document.createElement('li');
         userLi.innerHTML = `
@@ -85,7 +87,7 @@ function addToNavbar(user) {
     }
 }
 
-// Функция для загрузки чата с пользователем
+// Функция для загрузки чата
 function loadChat(username) {
     if (!username) {
         console.error('Имя пользователя не передано!');
@@ -95,29 +97,66 @@ function loadChat(username) {
     fetch(`/chat/${username}/`)
         .then(response => response.json())
         .then(data => {
-            // Обновляем информацию о пользователе
-            document.getElementById('user-profile-link').href = `/${username}/`; // Ссылка на профиль
-            document.getElementById('user-avatar').src = data.avatar;
-            document.getElementById('user-displayname').textContent = data.displayname;
-
-            // Отображаем информацию о пользователе и скрываем пустое окно чата
-            // document.getElementById('user-info').style.display = 'flex';
-            document.getElementById('empty-chat-window').style.display = 'none';
-
-            // Загружаем сообщения
+            const userProfileLink = document.getElementById('user-profile-link');
+            const userAvatar = document.getElementById('user-avatar');
+            const userDisplayname = document.getElementById('user-displayname');
             const chatMessagesContainer = document.getElementById('chat-messages');
-            chatMessagesContainer.innerHTML = ''; // Очищаем предыдущие сообщения
+            const messageForm = document.getElementById('messageForm');
+
+            if (!userProfileLink || !userAvatar || !userDisplayname || !chatMessagesContainer || !messageForm) {
+                console.error('Один или несколько элементов не найдены в DOM');
+                return;
+            }
+
+            // Обновляем информацию о пользователе
+            userProfileLink.href = `/${username}/`;
+            userAvatar.src = data.avatar;
+            userDisplayname.textContent = data.displayname;
+
+            document.getElementById('user-info').style.display = 'flex';
+            document.getElementById('empty-chat-window').style.display = 'none';
+            chatMessagesContainer.style.display = 'flex';
+            messageForm.style.display = 'flex';
+
+            chatMessagesContainer.innerHTML = '';
             data.messages.forEach(message => {
                 const messageDiv = document.createElement('div');
-                messageDiv.textContent = `${message.sender}: ${message.message}`;
+                const isMyMessage = message.sender === 'my_username'; // Замените 'my_username' на ваш идентификатор пользователя
+
+                messageDiv.classList.add('message');
+                if (isMyMessage) {
+                    messageDiv.classList.add('my-message');
+                    messageDiv.innerHTML = `
+                        <span class="sender">Вы:</span>
+                        <span class="message-content">${message.message}</span>
+                    `;
+                } else {
+                    messageDiv.classList.add('received-message');
+                    messageDiv.innerHTML = `
+                        <span class="sender">${message.sender}:</span>
+                        <span class="message-content">${message.message}</span>
+                    `;
+                }
+
                 chatMessagesContainer.appendChild(messageDiv);
             });
-
-            // Показываем контейнер для ввода сообщений
-            // document.getElementById('messageForm').style.display = 'flex';
         })
-        .catch(error => console.error('Ошибка:', error));
+        .catch(error => console.error('Ошибка при загрузке чата:', error));
 }
+
+// Функция для скрытия правой панели
+function resetChatUI() {
+    document.getElementById('user-info').style.display = 'none';
+    document.getElementById('chat-messages').style.display = 'none';
+    document.getElementById('messageForm').style.display = 'none';
+    document.getElementById('empty-chat-window').style.display = 'flex';
+}
+
+// Устанавливаем начальное состояние
+document.addEventListener('DOMContentLoaded', () => {
+    resetChatUI();
+    loadActiveChats();
+});
 
 // Функция для отправки сообщения
 document.getElementById('sendMessageButton').addEventListener('click', function () {
@@ -125,12 +164,11 @@ document.getElementById('sendMessageButton').addEventListener('click', function 
     const messageContent = messageInput.value;
     const receiverUsername = document.getElementById('user-displayname').textContent;
 
-    // Проверяем, что поле не пустое
     if (messageContent) {
         fetch('/send_message/', {
             method: 'POST',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken'), // Получите CSRF-токен
+                'X-CSRFToken': getCookie('csrftoken'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -143,9 +181,13 @@ document.getElementById('sendMessageButton').addEventListener('click', function 
             if (data.status === 'success') {
                 const chatMessagesContainer = document.getElementById('chat-messages');
                 const newMessageDiv = document.createElement('div');
-                newMessageDiv.textContent = `Вы: ${messageContent}`; // Отображаем "Вы" для своих сообщений
+                newMessageDiv.classList.add('message', 'my-message');
+                newMessageDiv.innerHTML = `
+                    <span class="sender">Вы:</span>
+                    <span class="message-content">${messageContent}</span>
+                `;
                 chatMessagesContainer.appendChild(newMessageDiv);
-                messageInput.value = ''; // Очищаем поле ввода
+                messageInput.value = '';
             } else {
                 console.error('Ошибка при отправке сообщения:', data.error);
             }
@@ -167,18 +209,11 @@ document.getElementById('clearChatButton').addEventListener('click', function ()
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Удаляем пользователя из локального навбара
-            const chatUsersContainer = document.getElementById('chat-users');
-            Array.from(chatUsersContainer.children).forEach(li => {
-                if (li.textContent.trim() === receiverUsername) {
-                    li.remove();
-                }
-            });
-
-            // Скрываем окно чата
-            document.getElementById('chat-messages').innerHTML = '';
-            document.getElementById('user-info').style.display = 'none';
-            document.getElementById('empty-chat-window').style.display = 'block';
+            const chatMessagesContainer = document.getElementById('chat-messages');
+            chatMessagesContainer.innerHTML = '';
+            resetChatUI();
+        } else {
+            console.error('Ошибка при очистке чата:', data.error);
         }
     })
     .catch(error => console.error('Ошибка при очистке чата:', error));
@@ -200,28 +235,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// Периодическое обновление навбара каждые 5 секунд
+// Периодическое обновление активных чатов
 setInterval(() => {
-    fetch('/active_chats/')
-        .then(response => response.json())
-        .then(data => {
-            const chatUsersContainer = document.getElementById('chat-users');
-            chatUsersContainer.innerHTML = ''; // Очищаем контейнер перед обновлением
-
-            data.results.forEach(user => {
-                const userLi = document.createElement('li');
-                userLi.innerHTML = `
-                    <div>
-                        <img src="${user.avatar}" class="avatar" alt="Avatar">
-                        <span>${user.displayname}</span>
-                    </div>
-                `;
-                userLi.addEventListener('click', () => loadChat(user.username)); // Подгружаем чат
-                chatUsersContainer.appendChild(userLi);
-            });
-        })
-        .catch(error => console.error('Ошибка при обновлении навбара:', error));
-}, 5000); // Обновление каждые 5 секунд
-
-// Запуск загрузки активных чатов при загрузке страницы
-document.addEventListener('DOMContentLoaded', loadActiveChats);
+    loadActiveChats();
+}, 5000);
