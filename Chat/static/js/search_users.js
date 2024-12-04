@@ -87,3 +87,4 @@ function loadChatUsers() {
 
 // Вызов функции при загрузке страницы
 document.addEventListener('DOMContentLoaded', loadChatUsers);
+
