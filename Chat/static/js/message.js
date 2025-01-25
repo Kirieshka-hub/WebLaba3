@@ -9,7 +9,7 @@ function loadActiveChats() {
             data.results.forEach(user => {
                 const userLi = document.createElement('li');
                 userLi.innerHTML = `
-                    <div>
+                    <div style="display: flex; justify-content: center; align-items: center; ">
                         <img src="${user.avatar}" class="avatar" alt="Avatar">
                         <span>${user.displayname}</span>
                     </div>
@@ -17,6 +17,7 @@ function loadActiveChats() {
                 userLi.addEventListener('click', () => loadChat(user.username)); // Подгружаем чат
                 chatUsersContainer.appendChild(userLi);
             });
+            
         })
         .catch(error => console.error('Ошибка при загрузке активных чатов:', error));
 }
@@ -79,7 +80,7 @@ function addToNavbar(user) {
         userLi.innerHTML = `
             <div>
                 <img src="${user.avatar}" class="avatar" alt="Avatar">
-                <span>${user.displayname}</span>
+                <div>${user.displayname}</div>
             </div>
         `;
         userLi.addEventListener('click', () => loadChat(user.username));
@@ -108,9 +109,10 @@ function loadChat(username) {
             }
 
             // Обновляем информацию о пользователе
-            userProfileLink.href = `/${username}/`;
+            userProfileLink.href = `/messanger/@${username}/`;
             userAvatar.src = data.avatar;
             userDisplayname.textContent = data.displayname;
+            userDisplayname.href = `/messanger/@${username}/`;
 
             document.getElementById('user-info').style.display = 'flex';
             document.getElementById('empty-chat-window').style.display = 'none';
@@ -292,7 +294,7 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-}
+}           
 
 // Периодическое обновление активных чатов
 setInterval(() => {

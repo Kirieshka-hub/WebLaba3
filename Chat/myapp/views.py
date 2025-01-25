@@ -16,6 +16,7 @@ def profile_view(request, username=None):
         # Получаем профиль пользователя по имени пользователя
         user = get_object_or_404(User, username=username)
         profile = user.profile  # Получаем профиль этого пользователя
+        print(user)
     else:
         # Если имя пользователя не указано, получаем профиль текущего пользователя
         try:
@@ -76,7 +77,7 @@ def search_users(request):
         if query.startswith('@'):
             query = query[1:]  # Убираем '@' из запроса
 
-        users = User.objects.filter(username__icontains=query)[:10]  # Ограничиваем количество результатов
+        users = User.objects.filter(username__icontains=query).exclude(id=request.user.id)[:10]
         results = [
             {
                 'username': user.username,
@@ -94,18 +95,19 @@ def search_users(request):
 def chat_history_view(request, username):
     receiver = get_object_or_404(User, username=username)
     messages = Chat.objects.filter(
-        (Q(sender=request.user) & Q(receiver=receiver)) |
-        (Q(sender=receiver) & Q(receiver=request.user))
+        (Q(sender=request.user) & Q(receiver=receiver) & Q(sender_deleted=False)) |
+        (Q(sender=receiver) & Q(receiver=request.user) & Q(receiver_deleted=False))
     ).order_by('timestamp')
 
     message_list = [{'sender': msg.sender.username, 'message': msg.message} for msg in messages]
-    
+
     return JsonResponse({
         'avatar': receiver.profile.avatar if receiver.profile.avatar else '/static/images/default_avatar.png',
-        'displayname': receiver.profile.name or receiver.username,
+        'displayname': receiver.username,
         'messages': message_list,
         'current_user': request.user.username,  # Передаем текущего пользователя
     })
+
 
 
 @login_required
@@ -132,21 +134,23 @@ def send_message(request):
 @login_required
 def clear_chat(request, username):
     """
-    Удаляет сообщения между текущим пользователем и выбранным пользователем,
-    но оставляет активный чат для другого пользователя.
+    Очищает чат у текущего пользователя, но оставляет сообщения для другого пользователя.
     """
     chat_user = get_object_or_404(User, username=username)
-
-    # Удаляем только сообщения, где текущий пользователь отправитель или получатель
-    Chat.objects.filter(
-        (Q(sender=request.user) & Q(receiver=chat_user)) |
-        (Q(sender=chat_user) & Q(receiver=request.user))
-    ).delete()
 
     # Удаляем активный чат для текущего пользователя
     ActiveChat.objects.filter(user=request.user, chat_user=chat_user).delete()
 
+    # Отмечаем сообщения как удаленные только для текущего пользователя
+    Chat.objects.filter(
+        sender=request.user, receiver=chat_user
+    ).update(sender_deleted=True)
+    Chat.objects.filter(
+        sender=chat_user, receiver=request.user
+    ).update(receiver_deleted=True)
+
     return JsonResponse({'status': 'success'})
+
 
 
 @login_required
@@ -187,3 +191,7 @@ def get_received_messages_users(request):
 
 
 
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)

@@ -31,8 +31,8 @@ body {
 .nav-container {
     width: 30%;
     /* height: 100%; Полная высота контейнера */
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(128, 128, 128, 1);
+    /* background-color: rgba(255, 255, 255, 0.1); */
+    border-right: 2px solid rgb(128, 128, 128);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -156,7 +156,7 @@ body {
     gap: 15px;
     padding: 15px;
     border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .user-info img.avatar {
@@ -205,7 +205,7 @@ body {
 .chat-messages .message {
     padding: 15px;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     text-align: left;
     word-wrap: break-word;
     margin-bottom: 10px;
@@ -228,15 +228,15 @@ body {
     display: flex;
     align-items: center;
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-top: 2px solid rgba(128, 128, 128, 0.5);
 }
 
 
 
 
 #messageForm {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     padding-bottom: 15px;
 }
 
@@ -301,3 +301,18 @@ body {
     align-self: flex-start; /* Выравниваем сообщения влево */
 }
 
+.inactive {
+    margin: 0;
+    margin-left: auto;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+}

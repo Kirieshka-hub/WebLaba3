@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-h#aaoa&wavo%48#afm53)1j-)#y7ws5!t9@ze@b%xg(%+x@(ke
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 LOGIN_REDIRECT_URL = '/messanger'
@@ -149,4 +149,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Установите время жизни сессии в секундах
-SESSION_COOKIE_AGE = 1209600  # Пример для двух недель
+SESSION_COOKIE_AGE = 1209600  #  две недели
+

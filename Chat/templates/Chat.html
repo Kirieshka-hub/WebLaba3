@@ -22,11 +22,11 @@
         <div class="container">
             <div class="nav-container">
                 <div class="search">
-                    <input type="text" class="search-input" placeholder="Поиск...">
+                    <input type="text" class="search-input" placeholder="Поиск..." >
                     <button type="submit" class="search-button">🔍</button>
                 </div>
                 <h3 id = "search-head" style="display: none;">Search</h3>
-                <div class="search-results" id = "search-res" style="display: none;"><p>No users found</p></div> <!-- Контейнер для результатов поиска -->
+                <div class="search-results" id = "search-res" style="display: none;"><p class="no-users">No users found</p></div> <!-- Контейнер для результатов поиска -->
                 <h3>Active</h3>
                 <ul class="chat-users" id="chat-users">
                     <!-- Здесь будут пользователи чата -->
@@ -38,15 +38,23 @@
                     <a href="#" id="user-profile-link"><img src="" class="avatar" id="user-avatar"></a>
                     <div class="status">
                         <a href="#" class="username-msg" id="user-displayname"></a>
-                        <p>online</p>
-                        <button id="clearChatButton">Очистить чат</button>
+                        <input type="hidden" id="hidden-username" value="">
                     </div>
+                    {% comment %} <div class="inactive">
+                        {% if user.is_authenticated %}
+                            <p >online</p>
+                        {% else %}
+                        <p >offline</p>
+                        {% endif %}
+                    </div> {% endcomment %}
+                    <button id="clearChatButton">Очистить чат</button>
                 </div>
                 <div class="empty-chat-window" id="empty-chat-window">
                     <p>Start Chatting Now!</p>
                 </div>
                 <div class="chat-messages message-input-container" id="chat-messages" style="display: none;">
                     <!-- Здесь будут сообщения чата -->
+                     
                 </div>
                 <form method="post" id="messageForm" style="display: none;">
                     {% csrf_token %}
@@ -57,13 +65,34 @@
             </div>
         </div>
     </div>
-    {% comment %} <script src="{% static 'js/search_users.js' %}"></script> {% endcomment %}
-    <script src="{% static "js/snowing.js" %}"></script>   
+    {% comment %} <script src="{% static 'js/search_users.js' %}"></script> {% endcomment %}  
     <script src="{% static "js/message.js" %}"></script>
     {% comment %} <script src="{% static 'js/clear.js' %}"></script> {% endcomment %}
-    
     <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.0/dist/index.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="{% static 'js/emoji.js' %}"></script>
+    <script src="{% static "js/snowing.js" %}"></script> 
 
+    <style>
+        @keyframes falling-snow {
+        from { transform: translateY(-100vh); }
+        to { transform: translateY(100vh); }
+    }
+
+    .snowflake {
+        position: absolute;
+        top: -10%;
+        width: 10px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: falling-snow linear infinite;
+    }
+
+    .no-users {
+        font-size: 24px;
+    }
+    </style>
 </body>
 </html>

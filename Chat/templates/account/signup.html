@@ -9,12 +9,24 @@
       {% csrf_token %}
       <h2>Register</h2>
 
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger global-errors">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       <!-- Поле для имени пользователя -->
       <div class="input-box">
         <span class="icon"></span>
-        {{ form.username.label_tag }}
-        {{ form.username }}
-        <!-- Если есть ошибки в поле -->
+        <input 
+          type="text" 
+          name="{{ form.username.name }}" 
+          id="{{ form.username.id_for_label }}" 
+          value="{{ form.username.value|default:'' }}" 
+          required />
+        <label for="{{ form.username.id_for_label }}">Username</label>
         {% if form.username.errors %}
           <div class="alert alert-danger">
             {{ form.username.errors }}
@@ -25,8 +37,13 @@
       <!-- Поле для email -->
       <div class="input-box">
         <span class="icon"></span>
-        {{ form.email.label_tag }}
-        {{ form.email }}      
+        <input 
+          type="email" 
+          name="{{ form.email.name }}" 
+          id="{{ form.email.id_for_label }}" 
+          value="{{ form.email.value|default:'' }}" 
+          required />
+        <label for="{{ form.email.id_for_label }}">Email</label>
         {% if form.email.errors %}
           <div class="alert alert-danger">
             {{ form.email.errors }}
@@ -37,8 +54,12 @@
       <!-- Поле для пароля -->
       <div class="input-box">
         <span class="icon"></span>
-        <label>password</label>
-        {{ form.password1 }}
+        <input 
+          type="password" 
+          name="{{ form.password1.name }}" 
+          id="{{ form.password1.id_for_label }}" 
+          required />
+        <label for="{{ form.password1.id_for_label }}">Password</label>
         {% if form.password1.errors %}
           <div class="alert alert-danger">
             {{ form.password1.errors }}
@@ -49,8 +70,12 @@
       <!-- Поле для подтверждения пароля -->
       <div class="input-box">
         <span class="icon"></span>
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
+        <input 
+          type="password" 
+          name="{{ form.password2.name }}" 
+          id="{{ form.password2.id_for_label }}" 
+          required />
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
         {% if form.password2.errors %}
           <div class="alert alert-danger">
             {{ form.password2.errors }}
@@ -59,203 +84,203 @@
       </div>
 
       <button type="submit">Register</button>
-      
+
       <div class="register-link">
         <p>
           Already have an account? <a href="{% url 'account_login' %}">Login</a>
         </p>
       </div>
+
     </form>
   </div>
 </section>
-
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
-    
-    section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background: url('../img/background.jpg') no-repeat;
-        background-size: cover;
-        background-position: center;
-        /* animation: animateBg 5s linear infinite; */
-    }
-    
-    
-    
-    .login-box {
-        background-color: transparent;
-        position: relative;
-        width: 400px;
-        height: 550px;
-        border-radius: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(2px);
-    
-    }
-    
-    
-    h2 {
-        font-size: 2em;
-        color: #fff;
-        text-align: center;
-    }
-    
-    .input-box {
-        position: relative;
-        width: 310px;
-        margin: 30px 0;
-        border-bottom: 2px solid #fff;
-    }
-    
-    
-    .icon {
-        position: absolute;
-        right: 8px;
-        color: #000;
-        font-size: 1.2em;
-        line-height: 57px;
-    
-    }
-    
-    .input-box label {
-        position: absolute;
-        top: 50%;
-        left: 5px;
-        transform: translateY(-50%);
-        font-size: 1em;
-        color: #fff;
-        pointer-events: none;
-        transition: .5s;
-    }
-    
-    .input-box input:focus~label,
-    .input-box input:valid~label {
-        top: -5px;
-    }
-    
-    
-    .input-box input {
-        width: 100%;
-        height: 50px;
-        background: transparent;
-        border: none;
-        outline: none;
-        font-size: 1em;
-        color: white;
-        padding: 0 35px 0 5px;
-    }
-    
-    .remember-forgot {
-        margin: -15px 0 15px;
-        font-size: 0.9em;
-        color: white;
-        display: flex;
-        justify-content: space-between;
-    }
-    
-    .remember-forgot a {
-        color: #fff;
-        text-decoration: none;
-    }
-    
-    .remember-forgot a:hover {
-        text-decoration: underline;
-    }
-    
-    button {
-        width: 100%;
-        height: 40px;
-        background: #fff;
-        border: none;
-        overflow: none;
-        cursor: pointer;
-        border-radius: 40px;
-        font-size: 1em;
-        color: #000;
-        font-weight: 500;
-    }
-    
-    
-    .register-link {
-        font-size: 0.9em;
-        color: #fff;
-        text-align: center;
-        margin: 25px 0 10px;
-    }
-    
-    .register-link p a {
-        color: #fff;
-        font-size: 0.9em;
-        font-weight: 600;
-        text-decoration: none;
-    }
-    
-    .register-link p a:hover {
-        text-decoration: underline;
-    }
-    
-    button:hover {
-        color: #000;
-        background-color: #888;
-    }
-    
-    @media (max-width:360px) {
-        .login-box {
-            width: 100%;
-            height: 100vh;
-            border: none;
-            border-radius: 0;
-        }
-    
-        .input-box {
-            width: 290px;
-        }
-    }
-    
-    /* for rеsеt */
-    .reset-btn {
-        margin-bottom: 25px;
-    }
-    
-    .back-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .back-btn a{
-        color: #fff;
-        text-decoration: none;
-    }
-    
-    .back-btn a:hover{
-        color: #aaa;
-    }
-    @keyframes falling-snow {
-        from { transform: translateY(-100vh); }
-        to { transform: translateY(100vh); }
-    }
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+  }
+  
+  section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: url('../img/background.jpg') no-repeat;
+      background-size: cover;
+      background-position: center;
+      /* animation: animateBg 5s linear infinite; */
+  }
+  
+  
+  
+  .login-box {
+      background-color: transparent;
+      position: relative;
+      width: 400px;
+      height: 550px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(2px);
+  
+  }
+  
+  
+  h2 {
+      font-size: 2em;
+      color: #fff;
+      text-align: center;
+  }
+  
+  .input-box {
+      position: relative;
+      width: 310px;
+      margin: 30px 0;
+      border-bottom: 2px solid #fff;
+  }
+  
+  
+  .icon {
+      position: absolute;
+      right: 8px;
+      color: #000;
+      font-size: 1.2em;
+      line-height: 57px;
+  
+  }
+  
+  .input-box label {
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      font-size: 1em;
+      color: #fff;
+      pointer-events: none;
+      transition: .5s;
+  }
+  
+  .input-box input:focus~label,
+  .input-box input:valid~label {
+      top: -5px;
+  }
+  
+  
+  .input-box input {
+      width: 100%;
+      height: 50px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 1em;
+      color: white;
+      padding: 0 35px 0 5px;
+  }
+  
+  .remember-forgot {
+      margin: -15px 0 15px;
+      font-size: 0.9em;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+  }
+  
+  .remember-forgot a {
+      color: #fff;
+      text-decoration: none;
+  }
+  
+  .remember-forgot a:hover {
+      text-decoration: underline;
+  }
+  
+  button {
+      width: 100%;
+      height: 40px;
+      background: #fff;
+      border: none;
+      overflow: none;
+      cursor: pointer;
+      border-radius: 40px;
+      font-size: 1em;
+      color: #000;
+      font-weight: 500;
+  }
+  
+  
+  .register-link {
+      font-size: 0.9em;
+      color: #fff;
+      text-align: center;
+      margin: 25px 0 10px;
+  }
+  
+  .register-link p a {
+      color: #fff;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-decoration: none;
+  }
+  
+  .register-link p a:hover {
+      text-decoration: underline;
+  }
+  
+  button:hover {
+      color: #000;
+      background-color: #888;
+  }
+  
+  @media (max-width:360px) {
+      .login-box {
+          width: 100%;
+          height: 100vh;
+          border: none;
+          border-radius: 0;
+      }
+  
+      .input-box {
+          width: 290px;
+      }
+  }
+  
+  /* for rеsеt */
+  .reset-btn {
+      margin-bottom: 25px;
+  }
+  
+  .back-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  .back-btn a{
+      color: #fff;
+      text-decoration: none;
+  }
+  
+  .back-btn a:hover{
+      color: #aaa;
+  }
+  @keyframes falling-snow {
+      from { transform: translateY(-100vh); }
+      to { transform: translateY(100vh); }
+  }
 
-    .snowflake {
-        position: absolute;
-        top: -10%;
-        width: 10px;
-        height: 10px;
-        background-color: white;
-        border-radius: 50%;
-        opacity: 0.8;
-        animation: falling-snow linear infinite;
-    }
-  </style>
+  .snowflake {
+      position: absolute;
+      top: -10%;
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: falling-snow linear infinite;
+  }
+</style>
 {% endblock %}

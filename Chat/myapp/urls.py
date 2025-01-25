@@ -3,6 +3,8 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views 
 
+
+
 urlpatterns = [
     path("", views.home_view, name="home"),
 
@@ -21,5 +23,6 @@ urlpatterns = [
     path('clear_chat/<str:username>/', views.clear_chat, name='clear_chat'),
     path('active_chats/', views.get_active_chats, name='active_chats'), 
     path('received_messages_users/', views.get_received_messages_users, name='received_messages_users'),
+
 
 ]

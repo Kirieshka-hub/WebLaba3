@@ -1,6 +1,78 @@
 {% extends 'layout/blank.html' %}
 
 {% block content %}
+    <div class="background">
+        <div class="container">
+            <h1>404</h1>
+            <h3>Ой, Страница не найдена</h3>
+            <a class="back_to_hame_page" href="{% url 'home' %}">вернyться на гланyю</a>
+        </div>
+    </div>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif; /* Шрифт для всего документа */
+            overflow: hidden; /* Скрываем прокрутку */
+        }
 
+    
+        .background {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 100vh; /* Высота на весь экран */
+            
+        }
+    
+        .container {
+            margin-top: -100px;
+            max-width: 800px; /* Максимальная ширина контейнера */
+            padding: 40px; /* Внутренние отступы */
+            background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный цвет фона контейнера */
+            backdrop-filter: blur(2px); /* Эффект размытия фона */
+            border-radius: 12px; /* Скругление углов */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Тень для контейнера */
+            text-align: center; /* Центрируем текст внутри контейнера */
+            
+        }
+    
+        h1 {
+            font-size: 2.5rem; /* Размер шрифта заголовка */
+            color: #1e3a8a; /* Цвет текста заголовка */
+            margin-bottom: 16px; /* Отступ снизу заголовка */
+        }
+
+
+        @keyframes falling-snow {
+            from { transform: translateY(-100vh); }
+            to { transform: translateY(100vh); }
+        }
+    
+        .snowflake {
+            position: absolute;
+            top: -10%;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: falling-snow linear infinite;
+        }
+
+        .back_to_hame_page {
+            margin-top: 15px;
+            text-decoration: none;
+            background-color: #007BFF; /* Цвет фона кнопки */
+            color: white; /* Цвет текста кнопки */
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .back_to_hame_page:hover {
+            background-color:rgb(1, 98, 202);
+        }
+    </style>
 {% endblock content %}
+
 
